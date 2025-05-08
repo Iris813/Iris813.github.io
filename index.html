@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYX IMPORT AND TRADING - Quality Products</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #003366;
+            --accent-color: #ffcc00;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* 隐藏产品 + 添加提示样式 */
+        #uniforms-grid {
+            display: none !important;
+        }
+
+        .uniforms-notice {
+            font-size: 25px;       /* 调大字体（默认16px） */
+            font-weight: 500;      /* 中等加粗 */
+            background: #f5f5f5;
+            padding: 30px;
+            text-align: center;
+            color: #0056b3;
+            border-radius: 8px;
+            grid-column: 1 / -1;
+            margin: 20px 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo-main {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+        
+        .logo-sub {
+            font-size: 24px;
+            color: var(--secondary-color);
+        }
+        
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0 30px;
+        }
+        
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-box button {
+            padding: 0 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .categories {
+            margin: 40px 0;
+        }
+        
+        .category-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .category-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .product-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+        
+        .contact-section {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+        
+        .contact-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .contact-subtitle {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .contact-email {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        
+        .contact-email a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .copyright {
+            background-color: #001a33;
+            color: #aaa;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+        }
+        
+        /* Product Detail Page Styles */
+        .product-detail {
+            padding: 40px 0;
+        }
+        
+        .product-detail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .product-gallery {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: contain;
+            background: var(--light-bg);
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .thumbnail {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s;
+        }
+        
+        .thumbnail:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .product-info-detail {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .product-title {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .product-description {
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .specs-table th, .specs-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .specs-table th {
+            background-color: var(--light-bg);
+            color: var(--secondary-color);
+        }
+        
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .logo {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo-main {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-main {
+                font-size: 36px;
+            }
+            
+            .logo-sub {
+                font-size: 18px;
+            }
+            
+            .product-image {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Page -->
+    <div id="main-page">
+        <header>
+            <div class="container">
+                <div class="logo">
+                    <span class="logo-main">LYX</span>
+                    <span class="logo-sub">IMPORT AND TRADING</span>
+                </div>
+            </div>
+        </header>
+        
+        <main class="container">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search products...">
+                    <button id="search-button">Search</button>
+                </div>
+            </div>
+            
+            <section class="categories">
+                <h2 class="category-title">OFFICE & ART SUPPLIES</h2>
+                <div class="products-grid" id="office-grid">
+                    <!-- Office supplies products will be loaded here -->
+                </div>
+                
+                <h2 class="category-title">UNIFORMS</h2>
+                <div class="products-grid" id="uniforms-grid">
+                    <!-- Uniforms products will be loaded here -->
+                </div>
+                
+                <!-- 在下面添加这行 -->    
+                <div class="uniforms-notice">This category of products is under preparation, please stay tuned!</div>
+
+            </section>
+        </main>
+        
+        <footer>
+            <div class="contact-section">
+                <div class="container">
+                    <h2 class="contact-title">CONTACT US</h2>
+                    <p class="contact-subtitle">Email Address</p>
+                    <p class="contact-subtitle">Questions or Concerns?</p>
+                    <p class="contact-email">Email: <a href="mailto:lyximport@outlook.com">lyximport@outlook.com</a></p>
+                </div>
+            </div>
+            <div class="copyright">
+                <div class="container">
+                    <p>&copy; 2025 LYX IMPORT AND TRADING. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Product Detail Page (hidden by default) -->
+    <div id="product-detail-page" style="display: none;">
+        <header>
+            <div class="container">
+                <div class="logo">
+                    <span class="logo-main">LYX</span>
+                    <span class="logo-sub">IMPORT AND TRADING</span>
+                </div>
+            </div>
+        </header>
+        
+        <main class="container product-detail">
+            <div class="product-detail-container">
+                <div class="product-gallery">
+                    <img id="main-product-image" class="main-image" src="" alt="Product Image">
+                    <div class="thumbnail-container" id="thumbnail-container">
+                        <!-- Thumbnails will be loaded here -->
+                    </div>
+                </div>
+                <div class="product-info-detail">
+                    <h1 id="product-title" class="product-title"></h1>
+                    <p id="product-description" class="product-description"></p>
+                    
+                    <table class="specs-table">
+                        <thead>
+                            <tr>
+                                <th>Specification</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="specs-table-body">
+                            <!-- Specifications will be loaded here -->
+                        </tbody>
+                    </table>
+                    
+                    <a href="#" class="back-button" id="back-button">Back to Products</a>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <div class="contact-section">
+                <div class="container">
+                    <h2 class="contact-title">CONTACT US</h2>
+                    <p class="contact-subtitle">Email Address</p>
+                    <p class="contact-subtitle">Questions or Concerns?</p>
+                    <p class="contact-email">Email: <a href="mailto:lyximport@outlook.com">lyximport@outlook.com</a></p>
+                </div>
+            </div>
+            <div class="copyright">
+                <div class="container">
+                    <p>&copy; 2025 LYX IMPORT AND TRADING. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Product data
+        const products = {
+            uniforms: [
+                {
+                    id: 'uniform-1',
+                    name: 'Nurse Scrubs',
+                    description: 'High-quality nurse scrubs made from durable, comfortable fabric. Available in multiple colors and sizes. Perfect for medical professionals who need both comfort and functionality during long shifts.',
+                    images: [
+                        'https://via.placeholder.com/600x600/0056b3/ffffff?text=Nurse+Scrubs',
+                        'https://via.placeholder.com/600x600/003366/ffffff?text=Nurse+Scrubs+2',
+                        'https://via.placeholder.com/600x600/ffcc00/333333?text=Nurse+Scrubs+3'
+                    ],
+                    specs: [
+                        { name: 'Product Code', value: 'NS-2025' },
+                        { name: 'Sizes', value: 'S, M, L, XL' },
+                        { name: 'Colors', value: 'Blue, Green, White, Pink' }
+                    ]
+                },
+                {
+                    id: 'uniform-2',
+                    name: 'Hoodies',
+                    description: 'Comfortable and stylish hoodies for everyday wear. Made with premium cotton blend fabric that provides warmth without bulk. Features a front pocket and adjustable drawstring hood.',
+                    images: [
+                        'https://via.placeholder.com/600x600/0056b3/ffffff?text=Hoodies',
+                        'https://via.placeholder.com/600x600/003366/ffffff?text=Hoodies+2',
+                        'https://via.placeholder.com/600x600/ffcc00/333333?text=Hoodies+3'
+                    ],
+                    specs: [
+                        { name: 'Product Code', value: 'HD-2025' },
+                        { name: 'Sizes', value: 'XS, S, M, L, XL, XXL' },
+                        { name: 'Colors', value: 'Black, Gray, Navy, Red' }
+                    ]
+                },
+                {
+                    id: 'uniform-3',
+                    name: 'Sweaters',
+                    description: 'Classic sweaters for professional and casual settings. Knitted from soft acrylic yarn that maintains its shape and resists pilling. Perfect for layering in cooler weather.',
+                    images: [
+                        'https://via.placeholder.com/600x600/0056b3/ffffff?text=Sweaters',
+                        'https://via.placeholder.com/600x600/003366/ffffff?text=Sweaters+2',
+                        'https://via.placeholder.com/600x600/ffcc00/333333?text=Sweaters+3'
+                    ],
+                    specs: [
+                        { name: 'Product Code', value: 'SW-2025' },
+                        { name: 'Sizes', value: 'XS, S, M, L, XL, 2XL, 3XL' },
+                        { name: 'Colors', value: 'Black, Beige, Burgundy, Dark Green' }
+                    ]
+                },
+                {
+                    id: 'uniform-4',
+                    name: 'Dress Shoes',
+                    description: 'Professional dress shoes with premium leather upper and cushioned insole. Features slip-resistant rubber sole for safety and durability. Suitable for formal and business casual attire.',
+                    images: [
+                        'https://via.placeholder.com/600x600/0056b3/ffffff?text=Dress+Shoes',
+                        'https://via.placeholder.com/600x600/003366/ffffff?text=Dress+Shoes+2',
+                        'https://via.placeholder.com/600x600/ffcc00/333333?text=Dress+Shoes+3'
+                    ],
+                    specs: [
+                        { name: 'Product Code', value: 'DS-2025' },
+                        { name: 'Sizes', value: 'US 6-13 (Men), US 5-11 (Women)' },
+                        { name: 'Colors', value: 'Black, Brown, Oxblood' }
+                    ]
+                }
+            ],
+            office: [
+                {
+                    id: 'office-1',
+                    name: 'Cutting Mat',
+                    description: 'Self-healing cutting mat perfect for crafts, sewing, and office use. Double-sided with grid markings for precise measurements. Protects your work surface while providing a smooth cutting experience.',
+                    images: [
+                        'images/cutting-mat-1.jpg',
+                        'images/cutting-mat-2.jpg',
+                        'images/cutting-mat-3.jpg'
+                    ],
+                    specs: [
+                        { name: 'Product Code', value: 'CM-2025' },
+                        { name: 'Size', value: '600mm x 450mm' },
+                        { name: 'Color', value: 'Green/White' }
+                    ]
+                },
+                {
+                    id: 'office-2',
+                    name: 'Drawing Board',
+                    description: 'Professional drawing board with adjustable tilt and smooth surface. Lightweight yet sturdy construction with built-in ruler. Ideal for architects, designers, and artists.',
+                    images: [
+                        'images/drawing-board-1.jpg',
+                        'images/drawing-board-2.jpg',
+                        'images/drawing-board-3.jpg'
+                    ],
+                    specs: [
+                        { name: 'Product Code', value: 'DB-2025' },
+                        { name: 'Size', value: '50cm x 65cm' },
+                        { name: 'Color', value: 'Natural Wood' }
+                    ]
+                },
+                {
+                    id: 'office-3',
+                    name: 'Oil Paint',
+                    description: 'Professional-grade oil paint set with vibrant pigments. Smooth consistency with excellent coverage and lightfastness. Perfect for artists of all skill levels.',
+                    images: [
+                        'images/oil-paint-1.jpg',
+                        'images/oil-paint-2.jpg'
+                    ],
+                    specs: [
+                        { name: 'Product Code', value: 'OP-2025' },
+                        { name: 'Type', value: 'Artist Quality Oil Paint' },
+                        { name: 'Capacity', value: '50ml/1.75fl oz' },
+                        { name: 'Colors', value: 'Primary colors + popular hues, up to 48 colors' }
+                    ]
+                },
+                {
+                    id: 'office-4',
+                    name: 'Nylon Carrying Bag',
+                    description: 'Durable nylon carrying bag with multiple compartments. Water-resistant fabric with reinforced stitching and comfortable shoulder strap. Can be carried on the sholder or by hand. Perfect for carrying art supplies, documents, or small equipment. Suitable for 60cm x 90cm drawing board.',
+                    images: [
+                        'images/nylon-carrying-bag-1.jpg',
+                        'images/nylon-carrying-bag-2.jpg'
+                    ],
+                    specs: [
+                        { name: 'Product Code', value: 'NCB-2025' },
+                        { name: 'Size', value: '65cm x 95cm' },
+                        { name: 'Color', value: 'Black' }
+                    ]
+                }
+            ]
+        };
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load products
+            loadProducts();
+            
+            function loadProducts() {
+                // 跳过 UNIFORMS 的产品加载
+                document.getElementById('uniforms-grid').style.display = 'none';
+                
+                // 正常加载其他产品...
+                const officeGrid = document.getElementById('office-grid');
+                officeGrid.innerHTML = '';
+                products.office.forEach(product => {
+                    officeGrid.appendChild(createProductCard(product));
+                });
+            }
+
+            // Set up search functionality
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Set up back button
+            document.getElementById('back-button').addEventListener('click', function(e) {
+                e.preventDefault();
+                showMainPage();
+            });
+        });
+        
+        function loadProducts() {
+            const uniformsGrid = document.getElementById('uniforms-grid');
+            const officeGrid = document.getElementById('office-grid');
+            
+            // Clear existing products
+            uniformsGrid.innerHTML = '';
+            officeGrid.innerHTML = '';
+            
+            // Load uniforms
+            products.uniforms.forEach(product => {
+                const productCard = createProductCard(product);
+                uniformsGrid.appendChild(productCard);
+            });
+            
+            // Load office supplies
+            products.office.forEach(product => {
+                const productCard = createProductCard(product);
+                officeGrid.appendChild(productCard);
+            });
+        }
+        
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.dataset.id = product.id;
+            
+            card.innerHTML = `
+                <img src="${product.images[0]}" alt="${product.name}" class="product-image">
+                <div class="product-info">
+                    <div class="product-name">${product.name}</div>
+                </div>
+            `;
+            
+            card.addEventListener('click', function() {
+                showProductDetail(product);
+            });
+            
+            return card;
+        }
+        
+        function showProductDetail(product) {
+            // Hide main page and show detail page
+            document.getElementById('main-page').style.display = 'none';
+            document.getElementById('product-detail-page').style.display = 'block';
+            
+            // Set product details
+            document.getElementById('product-title').textContent = product.name;
+            document.getElementById('product-description').textContent = product.description;
+            document.getElementById('main-product-image').src = product.images[0];
+            
+            // Load thumbnails
+            const thumbnailContainer = document.getElementById('thumbnail-container');
+            thumbnailContainer.innerHTML = '';
+            
+            product.images.forEach((image, index) => {
+                const thumbnail = document.createElement('img');
+                thumbnail.src = image;
+                thumbnail.className = 'thumbnail';
+                thumbnail.alt = `${product.name} ${index + 1}`;
+                thumbnail.addEventListener('click', function() {
+                    document.getElementById('main-product-image').src = image;
+                });
+                thumbnailContainer.appendChild(thumbnail);
+            });
+            
+            // Load specifications
+            const specsTableBody = document.getElementById('specs-table-body');
+            specsTableBody.innerHTML = '';
+            
+            product.specs.forEach(spec => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${spec.name}</td>
+                    <td>${spec.value}</td>
+                `;
+                specsTableBody.appendChild(row);
+            });
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function showMainPage() {
+            document.getElementById('main-page').style.display = 'block';
+            document.getElementById('product-detail-page').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+        
+        function performSearch() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            
+            if (!searchTerm) {
+                loadProducts();
+                return;
+            }
+            
+            // Filter and display matching products
+            const uniformsGrid = document.getElementById('uniforms-grid');
+            const officeGrid = document.getElementById('office-grid');
+            
+            uniformsGrid.innerHTML = '';
+            officeGrid.innerHTML = '';
+            
+            // Search in uniforms
+            products.uniforms.forEach(product => {
+                if (product.name.toLowerCase().includes(searchTerm) || 
+                    product.description.toLowerCase().includes(searchTerm)) {
+                    const productCard = createProductCard(product);
+                    uniformsGrid.appendChild(productCard);
+                }
+            });
+            
+            // Search in office supplies
+            products.office.forEach(product => {
+                if (product.name.toLowerCase().includes(searchTerm) || 
+                    product.description.toLowerCase().includes(searchTerm)) {
+                    const productCard = createProductCard(product);
+                    officeGrid.appendChild(productCard);
+                }
+            });
+            
+            // If no results found
+            if (uniformsGrid.children.length === 0 && officeGrid.children.length === 0) {
+                uniformsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No products found matching your search.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
